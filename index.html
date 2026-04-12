@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday Countdown</title>
+    <title>Happy Birthday Surprise</title>
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600&family=Caveat:wght@700&display=swap" rel="stylesheet">
     <style>
         /* --- PASTEL VIBE & BACKGROUND --- */
@@ -88,7 +88,7 @@
             height: 300px;
             margin: 0 auto;
             transition: transform 0.8s cubic-bezier(0.6, -0.28, 0.74, 0.05), opacity 0.5s ease;
-            cursor: pointer; /* Makes it clickable */
+            cursor: pointer;
         }
         .slide-out { transform: translateY(-150%); opacity: 0; pointer-events: none; }
 
@@ -262,8 +262,8 @@
 
     <div class="container">
         
-        <!-- TIMER SECTION -->
-        <div id="timer-section" class="glass-card">
+        <!-- TIMER SECTION (Hidden by script instantly) -->
+        <div id="timer-section" class="glass-card" style="display: none;">
             <h1>Countdown</h1>
             <div class="sub-text">Until the celebration begins...</div>
             <div class="countdown">
@@ -366,19 +366,16 @@
 
     <script>
         // --- CONFIGURATION ---
-        // Timer set to April 13, 2026 at 12:00 AM (Midnight)
-        const birthdayDate = new Date("April 13, 2026 00:00:00");
-
-        // --- LOGIC ---
-        const daysEl = document.getElementById('days');
-        const hoursEl = document.getElementById('hours');
-        const minsEl = document.getElementById('minutes');
-        const secsEl = document.getElementById('seconds');
+        // We skip the countdown and start immediately
         const timerSection = document.getElementById('timer-section');
         const celebrationSection = document.getElementById('celebration');
         const canvas = document.getElementById('confetti-canvas');
         const ctx = canvas.getContext('2d');
 
+        // Start immediately
+        timerSection.style.display = 'none';
+        celebrationSection.style.display = 'block';
+        
         // Hearts BG
         function createHearts() {
             const container = document.getElementById('bg-hearts');
@@ -391,36 +388,9 @@
                 heart.style.animationDelay = (Math.random() * 5) + 's';
                 container.appendChild(heart);
             }
-        }
-        createHearts();
-
-        // Countdown
-        function updateCountdown() {
-            const now = new Date();
-            const diff = birthdayDate - now;
-            if(diff <= 0) {
-                clearInterval(timerInterval);
-                startCelebration();
-                return;
-            }
-            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((diff % (1000 * 60)) / 1000);
-            daysEl.innerText = d < 10 ? '0'+d : d;
-            hoursEl.innerText = h < 10 ? '0'+h : h;
-            minsEl.innerText = m < 10 ? '0'+m : m;
-            secsEl.innerText = s < 10 ? '0'+s : s;
-        }
-        const timerInterval = setInterval(updateCountdown, 1000);
-        updateCountdown();
-
-        // Celebration
-        function startCelebration() {
-            timerSection.style.display = 'none';
-            celebrationSection.style.display = 'block';
             startConfetti();
         }
+        createHearts();
 
         // --- CAKE CUTTING LOGIC ---
         let isCut = false;
