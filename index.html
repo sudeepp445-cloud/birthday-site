@@ -18,11 +18,7 @@
             --border: rgba(255, 255, 255, 0.18);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'DM Sans', sans-serif;
@@ -38,15 +34,12 @@
         /* Floating Hearts Background */
         .floating-hearts {
             position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
+            width: 100%; height: 100%;
+            top: 0; left: 0;
             pointer-events: none;
             z-index: 0;
             overflow: hidden;
         }
-
         .heart {
             position: absolute;
             font-size: 20px;
@@ -54,7 +47,6 @@
             opacity: 0.6;
             animation: floatUp 6s linear infinite;
         }
-
         @keyframes floatUp {
             0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
             50% { opacity: 0.8; }
@@ -73,11 +65,10 @@
 
         /* Celebration Section */
         .celebration-section {
-            display: block; /* Visible immediately */
+            display: block; 
             text-align: center;
             animation: fadeScaleIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
-
         @keyframes fadeScaleIn {
             from { opacity: 0; transform: scale(0.9); }
             to { opacity: 1; transform: scale(1); }
@@ -101,7 +92,6 @@
             cursor: pointer;
             transition: transform 0.6s cubic-bezier(0.6, -0.28, 0.74, 0.05), opacity 0.5s ease;
         }
-
         .cake-wrapper.slide-out {
             transform: translateY(-120%);
             opacity: 0;
@@ -124,7 +114,6 @@
             background: linear-gradient(to bottom, #f6e58d, #f5cd79);
             border-radius: 12px 12px 0 0;
         }
-
         .cake-layer-middle {
             position: absolute;
             width: 100%;
@@ -132,7 +121,6 @@
             top: 25px;
             background: linear-gradient(to bottom, #ff9ff3, #f368e0);
         }
-
         .cake-layer-bottom {
             position: absolute;
             width: 100%;
@@ -148,7 +136,6 @@
             border-radius: 0 0 50% 50%;
             top: 0;
         }
-
         .drip-1 { width: 14px; height: 28px; left: 25px; }
         .drip-2 { width: 10px; height: 22px; left: 70px; }
         .drip-3 { width: 12px; height: 18px; left: 115px; }
@@ -161,7 +148,6 @@
             display: flex;
             gap: 24px;
         }
-
         .candle-stick {
             width: 8px;
             height: 35px;
@@ -169,7 +155,6 @@
             border-radius: 4px 4px 0 0;
             position: relative;
         }
-
         .flame-glow {
             position: absolute;
             bottom: 100%;
@@ -182,7 +167,6 @@
             animation: flickerFlame 0.15s ease-in-out infinite alternate;
             box-shadow: 0 0 15px rgba(255, 190, 118, 0.6);
         }
-
         @keyframes flickerFlame {
             from { transform: translateX(-50%) scale(1) rotate(-2deg); }
             to { transform: translateX(-50%) scale(0.9) rotate(2deg); }
@@ -199,14 +183,12 @@
             transition: transform 0.8s cubic-bezier(0.6, -0.28, 0.74, 0.05);
             clip-path: polygon(0 0, 100% 20%, 100% 100%, 0 100%);
         }
-
         .slice-top {
             position: absolute;
             width: 100%;
             height: 25px;
             background: linear-gradient(to bottom, #f6e58d, #f5cd79);
         }
-
         .slice-middle {
             position: absolute;
             width: 100%;
@@ -214,7 +196,6 @@
             top: 25px;
             background: linear-gradient(to bottom, #ff9ff3, #f368e0);
         }
-
         .slice-bottom {
             position: absolute;
             width: 100%;
@@ -222,11 +203,9 @@
             bottom: 0;
             background: linear-gradient(to bottom, #f8a5c2, #f78fb3);
         }
-
         .slice-inner {
             position: absolute;
-            top: 35px;
-            left: 0;
+            top: 35px; left: 0;
             width: 100%;
             height: 35px;
             background: rgba(255, 234, 167, 0.7);
@@ -236,8 +215,7 @@
 
         .cream-layer {
             position: absolute;
-            top: 25px;
-            left: 0;
+            top: 25px; left: 0;
             width: 100%;
             height: 8px;
             background: #ffeaa7;
@@ -268,7 +246,6 @@
             opacity: 0;
             pointer-events: none;
         }
-
         .knife-blade {
             width: 55px;
             height: 10px;
@@ -277,7 +254,6 @@
             margin-top: 7px;
             clip-path: polygon(0 0, 100% 30%, 100% 70%, 0 100%);
         }
-
         .knife-handle {
             width: 30px;
             height: 24px;
@@ -290,16 +266,12 @@
             opacity: 1;
             animation: swipeKnife 0.5s ease-in forwards;
         }
-
         @keyframes swipeKnife {
             from { left: -60px; opacity: 1; }
             to { left: 180px; opacity: 1; }
         }
 
-        .sliced .cake-slice {
-            transform: translateX(50px) rotate(18deg);
-        }
-
+        .sliced .cake-slice { transform: translateX(50px) rotate(18deg); }
         .sliced .slice-inner { opacity: 1; }
         .sliced .cream-layer { display: block; }
         .sliced .flame-glow { display: none; }
@@ -331,14 +303,11 @@
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             display: none;
         }
-
         .action-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(255, 107, 107, 0.6);
         }
-
         .action-btn:active { transform: translateY(0); }
-
         .action-btn.visible {
             display: inline-block;
             animation: fadeScaleIn 0.5s ease forwards;
@@ -347,8 +316,7 @@
         /* Note Overlay */
         .note-overlay {
             position: fixed;
-            top: 50%;
-            left: 50%;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%) scale(0.9);
             width: 92%;
             max-width: 480px;
@@ -365,18 +333,15 @@
             display: flex;
             flex-direction: column;
         }
-
         .note-overlay.visible {
             opacity: 1;
             pointer-events: auto;
             transform: translate(-50%, -50%) scale(1);
         }
-
         .note-overlay.hide-down {
             transform: translate(-50%, 120%) scale(0.9);
             opacity: 0;
         }
-
         .note-header {
             font-family: 'Playfair Display', serif;
             color: var(--accent);
@@ -384,7 +349,6 @@
             margin-bottom: 1.5rem;
             text-align: center;
         }
-
         .note-content {
             font-family: 'Caveat', cursive;
             font-size: 1.5rem;
@@ -393,13 +357,10 @@
             text-align: left;
             flex-grow: 1;
         }
-
         .note-content p { margin-bottom: 1rem; }
-
         .note-overlay::-webkit-scrollbar { width: 6px; }
         .note-overlay::-webkit-scrollbar-track { background: #f0ebe6; border-radius: 10px; }
         .note-overlay::-webkit-scrollbar-thumb { background: #ff9ff3; border-radius: 10px; }
-
         .note-btn-container {
             margin-top: 1.5rem;
             text-align: center;
@@ -410,8 +371,7 @@
         /* Gallery */
         .gallery-overlay {
             position: fixed;
-            top: 50%;
-            left: 50%;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%) scale(0.9);
             width: 92%;
             max-width: 640px;
@@ -426,13 +386,11 @@
             transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
             overflow-y: auto;
         }
-
         .gallery-overlay.visible {
             opacity: 1;
             pointer-events: auto;
             transform: translate(-50%, -50%) scale(1);
         }
-
         .gallery-title {
             font-family: 'Playfair Display', serif;
             color: var(--accent);
@@ -440,14 +398,12 @@
             font-size: 1.75rem;
             margin-bottom: 1.5rem;
         }
-
         .photo-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
             gap: 12px;
             padding-bottom: 1rem;
         }
-
         .photo-frame {
             aspect-ratio: 1;
             background: #fff;
@@ -457,20 +413,17 @@
             overflow: hidden;
             border-radius: 8px;
         }
-
         .photo-frame:hover {
             transform: scale(1.05) rotate(2deg);
             z-index: 10;
         }
-
         .photo-frame img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             border-radius: 4px;
         }
-
-        /* Rotation fix for the last two photos (90 + 180 = 270deg) */
+        /* Rotation fix for the last two photos */
         .photo-frame:nth-last-child(-n+2) img {
             transform: rotate(270deg);
         }
@@ -483,20 +436,8 @@
             z-index: 999;
         }
 
-        /* Reduced Motion */
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-
         /* Mobile Adjustments */
         @media (max-width: 480px) {
-            .timer-card { padding: 2rem 1.5rem; }
-            .countdown-grid { gap: 8px; }
-            .time-unit { padding: 1rem 0.25rem; }
             .cake-wrapper { width: 240px; height: 220px; }
             .note-overlay { padding: 1.5rem; }
             .note-content { font-size: 1.25rem; }
@@ -504,16 +445,15 @@
     </style>
 </head>
 <body>
-    <!-- Background Hearts -->
     <div class="floating-hearts" id="bg-hearts"></div>
     <canvas id="confetti-canvas"></canvas>
 
     <div class="main-container">
-        <!-- Celebration Section (Visible Immediately) -->
+        <!-- Celebration Section -->
         <div id="celebration" class="celebration-section">
             <h1 class="wish-title">Happy Birthday</h1>
             
-            <div class="cake-wrapper" id="cake-wrapper" onclick="triggerCut()">
+            <div class="cake-wrapper" id="cake-wrapper">
                 <div class="knife">
                     <div class="knife-blade"></div>
                     <div class="knife-handle"></div>
@@ -544,7 +484,7 @@
 
             <p class="instruction-text" id="instruction">Click the cake to cut</p>
 
-            <button id="surprise-btn" class="action-btn" onclick="showSurprise()">Click for Surprise</button>
+            <button id="surprise-btn" class="action-btn">Click for Surprise</button>
 
             <!-- Note Overlay -->
             <div class="note-overlay" id="note-overlay">
@@ -570,7 +510,7 @@
                     <p>HAPPY BIRTHDAY MY PILLU</p>
                 </div>
                 <div class="note-btn-container">
-                    <button class="action-btn visible" onclick="showGallery()">Our Memories</button>
+                    <button class="action-btn visible" id="gallery-btn">Our Memories</button>
                 </div>
             </div>
 
@@ -578,6 +518,7 @@
             <div class="gallery-overlay" id="gallery-overlay">
                 <h2 class="gallery-title">Our Memories</h2>
                 <div class="photo-grid">
+                    <!-- Images forced to HTTPS for GitHub Pages compatibility -->
                     <div class="photo-frame">
                         <img src="https://z-cdn-media.chatglm.cn/files/a41dac0b-2964-43f8-b1ff-19d13616697d.jpeg?auth_key=1876020229-ba21417eacaa4a74bf79f8a04875d5a9-0-35b74dce000debc502b5e542f4ef2595" alt="Memory 1">
                     </div>
@@ -605,16 +546,19 @@
         // --- VARIABLES ---
         const canvas = document.getElementById('confetti-canvas');
         const ctx = canvas.getContext('2d');
+        const cakeWrapper = document.getElementById('cake-wrapper');
+        const surpriseBtn = document.getElementById('surprise-btn');
+        const galleryBtn = document.getElementById('gallery-btn');
+        const noteOverlay = document.getElementById('note-overlay');
+        const galleryOverlay = document.getElementById('gallery-overlay');
+        const instruction = document.getElementById('instruction');
 
         let confettiPieces = [];
-        let animationId = null;
         let isCut = false;
         
         const confettiColors = ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#54a0ff'];
 
         // --- INITIALIZATION ---
-        
-        // Resize canvas
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -622,7 +566,6 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        // Create floating hearts
         function createHearts() {
             const container = document.getElementById('bg-hearts');
             for(let i=0; i<15; i++) {
@@ -636,62 +579,48 @@
             }
         }
         createHearts();
-        
-        // Start Confetti immediately since timer is removed
         startConfetti();
 
-        // --- CAKE CUTTING ---
-        function triggerCut() {
+        // --- EVENT LISTENERS (Explicitly Defined) ---
+        
+        cakeWrapper.addEventListener('click', function() {
             if(isCut) return;
-            
-            const wrapper = document.getElementById('cake-wrapper');
-            const instruction = document.getElementById('instruction');
-            const btn = document.getElementById('surprise-btn');
-            
-            wrapper.classList.add('cutting');
+            isCut = true;
+
+            cakeWrapper.classList.add('cutting');
             
             setTimeout(() => {
-                wrapper.classList.remove('cutting');
-                wrapper.classList.add('sliced');
+                cakeWrapper.classList.remove('cutting');
+                cakeWrapper.classList.add('sliced');
                 instruction.innerText = "Yummy!";
                 burstConfetti();
             }, 500);
 
             setTimeout(() => {
                 instruction.style.opacity = '0';
-                btn.classList.add('visible');
+                surpriseBtn.classList.add('visible');
             }, 1400);
+        });
 
-            isCut = true;
-        }
-
-        // --- SURPRISE & GALLERY ---
-        function showSurprise() {
-            const cakeWrapper = document.getElementById('cake-wrapper');
-            const btn = document.getElementById('surprise-btn');
-            const note = document.getElementById('note-overlay');
-
+        surpriseBtn.addEventListener('click', function() {
             cakeWrapper.classList.add('slide-out');
-            btn.classList.remove('visible');
+            surpriseBtn.classList.remove('visible');
 
             setTimeout(() => {
-                note.classList.add('visible');
+                noteOverlay.classList.add('visible');
                 burstConfetti();
             }, 600);
-        }
+        });
 
-        function showGallery() {
-            const note = document.getElementById('note-overlay');
-            const gallery = document.getElementById('gallery-overlay');
-
-            note.classList.remove('visible');
-            note.classList.add('hide-down');
+        galleryBtn.addEventListener('click', function() {
+            noteOverlay.classList.remove('visible');
+            noteOverlay.classList.add('hide-down');
 
             setTimeout(() => {
-                gallery.classList.add('visible');
+                galleryOverlay.classList.add('visible');
                 burstConfetti();
             }, 500);
-        }
+        });
 
         // --- CONFETTI ENGINE ---
         function randomPiece() {
