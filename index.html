@@ -263,7 +263,6 @@
 
     <div class="container">
         
-        <!-- TIMER SECTION -->
         <div id="timer-section" class="glass-card">
             <h1>Countdown</h1>
             <div class="sub-text">Until the celebration begins...</div>
@@ -275,11 +274,9 @@
             </div>
         </div>
 
-        <!-- CELEBRATION SECTION -->
         <div id="celebration">
             <div class="wish-text">Happy Birthday!</div>
             
-            <!-- Cake Stage -->
             <div class="cake-stage" id="cake-stage" onclick="triggerCut()">
                 <div class="knife"><div class="blade"></div><div class="handle"></div></div>
                 <div class="cake-whole">
@@ -306,10 +303,8 @@
 
             <div class="instruction" id="instruction">Click the cake to cut! 🎂</div>
 
-            <!-- BUTTON 1: Surprise (Shows Note) -->
             <button id="surprise-btn" class="action-btn" onclick="showSurprise()">Click for Surprise 🎁</button>
 
-            <!-- NOTE OVERLAY -->
             <div class="note-overlay" id="note-overlay">
                 <div class="note-header">A Special Message</div>
                 <div class="note-content">
@@ -332,37 +327,29 @@
                     <p>Ha aur hamesha yaad rakhna no matter what the situation is me hamesha tere saath hu</p>
                     <p>HAPPY BIRTHDAY MY PILLU</p>
                 </div>
-                <!-- BUTTON 2: Our Memories (Shows Gallery) -->
                 <button class="action-btn" style="display: block; margin: 20px auto 0; flex-shrink: 0;" onclick="showGallery()">Our Memories 📸</button>
             </div>
 
-            <!-- PHOTO GALLERY (Your Photos) -->
             <div class="gallery-container" id="gallery-container">
                 <div class="gallery-title">Our Memories</div>
                 <div class="photo-grid">
-                    <!-- Photo 1 -->
                     <div class="photo-frame">
-                        <img src="https://z-cdn-media.chatglm.cn/files/a5ce0647-d124-4c0f-8ccd-6a5f59522f2f.jpeg?auth_key=1874079669-4791c4d2221842388a4fa793ff583587-0-debc44bcd23d327288636c97d59adc24" alt="Memory 1">
+                        <img src="11.jpeg" alt="Memory 1">
                     </div>
-                    <!-- Photo 2 -->
                     <div class="photo-frame">
-                        <img src="https://z-cdn-media.chatglm.cn/files/cf5fdc7b-fd79-482d-abd0-82202def5a14.jpeg?auth_key=1874079669-32e634efceb84210a8d8faba3e30f8a8-0-e6fc672b7a39d6c8552c4c7b9ee0a018" alt="Memory 2">
+                        <img src="22.jpeg" alt="Memory 2">
                     </div>
-                    <!-- Photo 3 -->
                     <div class="photo-frame">
-                        <img src="https://z-cdn-media.chatglm.cn/files/7276d0e0-356f-496d-af93-9c08a0c017a8.jpeg?auth_key=1874079669-42847e4404f14b5f9e9c359fb372a51c-0-ada238eef06c918cf14e46d6b0cbb65d" alt="Memory 3">
+                        <img src="66.jpeg" alt="Memory 3">
                     </div>
-                    <!-- Photo 4 -->
                     <div class="photo-frame">
-                        <img src="https://z-cdn-media.chatglm.cn/files/75e7e9b3-62b4-4e18-91ef-7cdc61929e98.jpeg?auth_key=1874079669-cd6b880f945b407296e8cd1fb5c45bfa-0-2bfa73ef8d078cc84e25ecf0ff79baec" alt="Memory 4">
+                        <img src="5555.jpeg" alt="Memory 4">
                     </div>
-                    <!-- Photo 5 -->
                     <div class="photo-frame">
-                        <img src="https://z-cdn-media.chatglm.cn/files/b4e6dae7-d59e-4c39-91ee-5b936227bf9e.jpeg?auth_key=1874079669-749fcf873e9d46e8946014bb523d63e1-0-38a0245381866e7d7a4b7831cd66a9ab" alt="Memory 5">
+                        <img src="WhatsApp Image 2026-03-21 at 1.12.12 PM.jpeg" alt="Memory 5">
                     </div>
-                    <!-- Photo 6 -->
                     <div class="photo-frame">
-                        <img src="https://z-cdn-media.chatglm.cn/files/dcd7cf4b-30fd-4598-8781-a0020d4e9e7f.jpeg?auth_key=1874079669-0a6e546a07df42c694b524ccaa34dea0-0-9b768d7318ae4b054bd6e9c045d7db01" alt="Memory 6">
+                        <img src="WhatsApp Image 2026-03-21 at 1.12.13 PM.jpeg" alt="Memory 6">
                     </div>
                 </div>
             </div>
@@ -373,7 +360,7 @@
 
     <script>
         // --- CONFIGURATION ---
-        // Timer set to April 13, 2025 at 12:00 AM (Midnight)
+        // Timer set to April 13, 2026 at 12:00 AM (Midnight)
         const birthdayDate = new Date("April 13, 2026 00:00:00");
 
         // --- LOGIC ---
@@ -384,148 +371,3 @@
         const timerSection = document.getElementById('timer-section');
         const celebrationSection = document.getElementById('celebration');
         const canvas = document.getElementById('confetti-canvas');
-        const ctx = canvas.getContext('2d');
-
-        // Hearts BG
-        function createHearts() {
-            const container = document.getElementById('bg-hearts');
-            for(let i=0; i<15; i++) {
-                const heart = document.createElement('div');
-                heart.innerHTML = '❤';
-                heart.classList.add('heart');
-                heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
-                heart.style.animationDelay = (Math.random() * 5) + 's';
-                container.appendChild(heart);
-            }
-        }
-        createHearts();
-
-        // Countdown
-        function updateCountdown() {
-            const now = new Date();
-            const diff = birthdayDate - now;
-            if(diff <= 0) {
-                clearInterval(timerInterval);
-                startCelebration();
-                return;
-            }
-            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((diff % (1000 * 60)) / 1000);
-            daysEl.innerText = d < 10 ? '0'+d : d;
-            hoursEl.innerText = h < 10 ? '0'+h : h;
-            minsEl.innerText = m < 10 ? '0'+m : m;
-            secsEl.innerText = s < 10 ? '0'+s : s;
-        }
-        const timerInterval = setInterval(updateCountdown, 1000);
-        updateCountdown();
-
-        // Celebration
-        function startCelebration() {
-            timerSection.style.display = 'none';
-            celebrationSection.style.display = 'block';
-            startConfetti();
-        }
-
-        // --- CAKE CUTTING LOGIC ---
-        let isCut = false;
-        function triggerCut() {
-            if(isCut) return;
-            const stage = document.getElementById('cake-stage');
-            const instruction = document.getElementById('instruction');
-            const btn = document.getElementById('surprise-btn');
-            
-            stage.classList.add('cutting');
-            setTimeout(() => {
-                stage.classList.remove('cutting');
-                stage.classList.add('sliced');
-                instruction.innerText = "Yummy! 🍰";
-                burstConfetti();
-            }, 500);
-
-            setTimeout(() => {
-                instruction.style.opacity = '0';
-                btn.style.display = 'inline-block';
-                btn.style.animation = "zoomIn 0.5s ease forwards";
-            }, 1400);
-
-            isCut = true;
-        }
-
-        // --- SHOW SURPRISE (NOTE) ---
-        function showSurprise() {
-            const cakeStage = document.getElementById('cake-stage');
-            const btn = document.getElementById('surprise-btn');
-            const note = document.getElementById('note-overlay');
-
-            cakeStage.classList.add('slide-out');
-            btn.style.display = 'none';
-
-            setTimeout(() => {
-                note.classList.add('show');
-                burstConfetti();
-            }, 600);
-        }
-
-        // --- SHOW GALLERY (PHOTOS) ---
-        function showGallery() {
-            const note = document.getElementById('note-overlay');
-            const gallery = document.getElementById('gallery-container');
-
-            // Hide Note
-            note.classList.remove('show');
-            note.classList.add('hide-down');
-
-            // Show Gallery
-            setTimeout(() => {
-                gallery.classList.add('show');
-                burstConfetti();
-            }, 500);
-        }
-
-        // --- CONFETTI ENGINE ---
-        let pieces = [];
-        const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#54a0ff'];
-        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        function randomPiece() {
-            return {
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height - canvas.height,
-                size: Math.random() * 10 + 5,
-                color: colors[Math.floor(Math.random() * colors.length)],
-                speed: Math.random() * 3 + 2,
-                spin: Math.random() * 10 - 5
-            };
-        }
-        function startConfetti() {
-            for(let i=0; i<50; i++) pieces.push(randomPiece());
-            requestAnimationFrame(animateConfetti);
-        }
-        function burstConfetti() {
-            for(let i=0; i<100; i++) {
-                let p = randomPiece();
-                p.y = canvas.height / 2; 
-                pieces.push(p);
-            }
-        }
-        function animateConfetti() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            pieces.forEach((p, index) => {
-                p.y += p.speed;
-                p.x += p.spin;
-                ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.spin);
-                ctx.fillStyle = p.color;
-                ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size/2);
-                ctx.restore();
-                if(p.y > canvas.height) pieces.splice(index, 1);
-            });
-            requestAnimationFrame(animateConfetti);
-        }
-    </script>
-</body>
-</html>
