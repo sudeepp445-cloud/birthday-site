@@ -146,7 +146,7 @@
         .sliced .cream-filling { display: block; }
         .sliced .flame { display: none; }
 
-        .cake-stage { cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg> 12 12, auto'); }
+        .cake-stage { cursor: pointer; }
 
         .instruction { margin-top: 20px; font-size: 0.9rem; color: #fff; background: rgba(0,0,0,0.2); padding: 5px 15px; border-radius: 20px; display: inline-block; transition: opacity 0.5s; }
 
@@ -336,32 +336,25 @@
                 <button class="action-btn" style="display: block; margin: 20px auto 0; flex-shrink: 0;" onclick="showGallery()">Our Memories 📸</button>
             </div>
 
-            <!-- PHOTO GALLERY (Your Photos) -->
+            <!-- PHOTO GALLERY -->
             <div class="gallery-container" id="gallery-container">
                 <div class="gallery-title">Our Memories</div>
                 <div class="photo-grid">
-                    <!-- Photo 1 -->
-                    <!-- Photo 1: Outdoor scene -->
                     <div class="photo-frame">
                         <img src="https://z-cdn-media.chatglm.cn/files/a41dac0b-2964-43f8-b1ff-19d13616697d.jpeg?auth_key=1876020229-ba21417eacaa4a74bf79f8a04875d5a9-0-35b74dce000debc502b5e542f4ef2595" alt="Memory 1">
                     </div>
-                    <!-- Photo 2: Yellow outfits, cat ears -->
                     <div class="photo-frame">
                         <img src="https://z-cdn-media.chatglm.cn/files/bd6e7504-d085-45da-af6a-6ad69f930ff9.jpeg?auth_key=1876020229-0dc012b9d33045c2b028831155c6bea7-0-f621c1e77443c26dde60ee33f4f0d26c" alt="Memory 2">
                     </div>
-                    <!-- Photo 3: Tent selfie -->
                     <div class="photo-frame">
                         <img src="https://z-cdn-media.chatglm.cn/files/adfae42d-1a5e-48b5-9fd7-7d6fa293a310.jpeg?auth_key=1876020229-0ca0c0b27c334786ad0242bff6186272-0-9728e15a7906e735e8be89e876c9679b" alt="Memory 3">
                     </div>
-                    <!-- Photo 4: Black and white close up -->
                     <div class="photo-frame">
                         <img src="https://z-cdn-media.chatglm.cn/files/46411e84-b671-4c5b-b3b1-c8b2b96bc2b1.jpeg?auth_key=1876020229-dc8d97c4ae45444d90467be946f7d7d3-0-37ed87917efcd7e028200b44c9208ac7" alt="Memory 4">
                     </div>
-                    <!-- Photo 5: WhatsApp Image 12 PM -->
                     <div class="photo-frame">
                         <img src="https://z-cdn-media.chatglm.cn/files/9cba24ac-4598-4b04-a529-bab5b4231614.jpeg?auth_key=1876020229-830c0a67cadd460c9f36360ced05a407-0-265572611de6edeb8c64df099052f1c8" alt="Memory 5">
                     </div>
-                    <!-- Photo 6: WhatsApp Image 13 PM -->
                     <div class="photo-frame">
                         <img src="https://z-cdn-media.chatglm.cn/files/4d85acb8-5bfe-4ad5-9207-1b4c188fe04c.jpeg?auth_key=1876020229-dc28376dfdf642919253360e13b256f1-0-9365979741523daf58056e63171d0e95" alt="Memory 6">
                     </div>
@@ -374,7 +367,7 @@
 
     <script>
         // --- CONFIGURATION ---
-        // Timer set to April 13, 2025 at 12:00 AM (Midnight)
+        // Timer set to April 13, 2026 at 12:00 AM (Midnight)
         const birthdayDate = new Date("April 13, 2026 00:00:00");
 
         // --- LOGIC ---
@@ -402,134 +395,6 @@
         }
         createHearts();
 
-        // Countdown
-        function updateCountdown() {
-            const now = new Date();
-            const diff = birthdayDate - now;
-            if(diff <= 0) {
-                clearInterval(timerInterval);
-                startCelebration();
-                return;
-            }
-            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((diff % (1000 * 60)) / 1000);
-            daysEl.innerText = d < 10 ? '0'+d : d;
-            hoursEl.innerText = h < 10 ? '0'+h : h;
-            minsEl.innerText = m < 10 ? '0'+m : m;
-            secsEl.innerText = s < 10 ? '0'+s : s;
-        }
-        const timerInterval = setInterval(updateCountdown, 1000);
-        updateCountdown();
-
-        // Celebration
-        function startCelebration() {
-            timerSection.style.display = 'none';
-            celebrationSection.style.display = 'block';
-            startConfetti();
-        }
-
-        // --- CAKE CUTTING LOGIC ---
-        let isCut = false;
-        function triggerCut() {
-            if(isCut) return;
-            const stage = document.getElementById('cake-stage');
-            const instruction = document.getElementById('instruction');
-            const btn = document.getElementById('surprise-btn');
-            
-            stage.classList.add('cutting');
-            setTimeout(() => {
-                stage.classList.remove('cutting');
-                stage.classList.add('sliced');
-                instruction.innerText = "Yummy! 🍰";
-                burstConfetti();
-            }, 500);
-
-            setTimeout(() => {
-                instruction.style.opacity = '0';
-                btn.style.display = 'inline-block';
-                btn.style.animation = "zoomIn 0.5s ease forwards";
-            }, 1400);
-
-            isCut = true;
-        }
-
-        // --- SHOW SURPRISE (NOTE) ---
-        function showSurprise() {
-            const cakeStage = document.getElementById('cake-stage');
-            const btn = document.getElementById('surprise-btn');
-            const note = document.getElementById('note-overlay');
-
-            cakeStage.classList.add('slide-out');
-            btn.style.display = 'none';
-
-            setTimeout(() => {
-                note.classList.add('show');
-                burstConfetti();
-            }, 600);
-        }
-
-        // --- SHOW GALLERY (PHOTOS) ---
-        function showGallery() {
-            const note = document.getElementById('note-overlay');
-            const gallery = document.getElementById('gallery-container');
-
-            // Hide Note
-            note.classList.remove('show');
-            note.classList.add('hide-down');
-
-            // Show Gallery
-            setTimeout(() => {
-                gallery.classList.add('show');
-                burstConfetti();
-            }, 500);
-        }
-
-        // --- CONFETTI ENGINE ---
-        let pieces = [];
-        const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#54a0ff'];
-        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        function randomPiece() {
-            return {
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height - canvas.height,
-                size: Math.random() * 10 + 5,
-                color: colors[Math.floor(Math.random() * colors.length)],
-                speed: Math.random() * 3 + 2,
-                spin: Math.random() * 10 - 5
-            };
-        }
-        function startConfetti() {
-            for(let i=0; i<50; i++) pieces.push(randomPiece());
-            requestAnimationFrame(animateConfetti);
-        }
-        function burstConfetti() {
-            for(let i=0; i<100; i++) {
-                let p = randomPiece();
-                p.y = canvas.height / 2; 
-                pieces.push(p);
-            }
-        }
-        function animateConfetti() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            pieces.forEach((p, index) => {
-                p.y += p.speed;
-                p.x += p.spin;
-                ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.spin);
-                ctx.fillStyle = p.color;
-                ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size/2);
-                ctx.restore();
-                if(p.y > canvas.height) pieces.splice(index, 1);
-            });
-            requestAnimationFrame(animateConfetti);
-        }
-    </script>
-</body>
-</html>
         // Countdown
         function updateCountdown() {
             const now = new Date();
