@@ -1,330 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Countdown</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600&family=Caveat:wght@700&display=swap" rel="stylesheet">
+    <style>
+        /* --- PASTEL VIBE & BACKGROUND --- */
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            color: #4a4a4a;
+        }
 
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600&family=Caveat:wght@700&display=swap');
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Poppins', sans-serif; }
-  .wrap {
-    min-height: 600px;
-    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
-    display: flex; align-items: center; justify-content: center;
-    border-radius: 16px; padding: 30px; position: relative; overflow: hidden;
-  }
-  .hearts-bg { position: absolute; inset: 0; pointer-events: none; }
-  .heart { position: absolute; font-size: 18px; animation: floatUp 6s linear infinite; opacity: 0.5; }
-  @keyframes floatUp {
-    0% { transform: translateY(100%) rotate(0deg); opacity: 0; }
-    50% { opacity: 0.7; }
-    100% { transform: translateY(-200px) rotate(360deg); opacity: 0; }
-  }
-  canvas.confetti { position: absolute; inset: 0; pointer-events: none; width: 100%; height: 100%; border-radius: 16px; }
+        /* Floating Hearts */
+        .floating-hearts {
+            position: absolute;
+            width: 100%; height: 100%;
+            top: 0; left: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            animation: floatUp 6s linear infinite;
+            opacity: 0.6;
+            color: #ff6b6b;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
 
-  .center { text-align: center; position: relative; z-index: 10; width: 100%; }
+        /* Main Container */
+        .container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            width: 90%;
+            max-width: 500px;
+        }
 
-  .wish { font-family: 'Pacifico', cursive; font-size: 2.8rem; color: #fff; text-shadow: 3px 3px 0 #d63384; margin-bottom: 24px; }
+        /* Glassmorphism Card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        h1 { font-family: 'Pacifico', cursive; font-size: 2.5rem; color: #d63384; margin-bottom: 10px; text-shadow: 2px 2px 0px rgba(255,255,255,0.5); }
+        .sub-text { font-size: 1rem; margin-bottom: 30px; opacity: 0.8; }
 
-  .cake-wrap { position: relative; width: 220px; height: 220px; margin: 0 auto; cursor: pointer; }
+        /* Timer Grid */
+        .countdown { display: flex; justify-content: center; gap: 15px; }
+        .time-box {
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            width: 70px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+        .time-box:hover { transform: translateY(-5px); }
+        .number { font-size: 2.5rem; font-weight: 600; color: #ff6090; line-height: 1; }
+        .label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: #888; }
 
-  .plate {
-    position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
-    width: 200px; height: 14px; background: #ccc; border-radius: 50%;
-  }
+        /* --- CELEBRATION SECTION --- */
+        #celebration { display: none; animation: zoomIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes zoomIn { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .wish-text { font-family: 'Pacifico', cursive; font-size: 3rem; color: #fff; text-shadow: 3px 3px 0px #d63384; margin-bottom: 30px; }
 
-  .cake-body {
-    position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
-    width: 160px;
-  }
+        /* --- THE CAKE SYSTEM --- */
+        .cake-stage {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+            transition: transform 0.8s cubic-bezier(0.6, -0.28, 0.74, 0.05), opacity 0.5s ease;
+        }
+        .slide-out { transform: translateY(-150%); opacity: 0; pointer-events: none; }
 
-  .frosting {
-    height: 18px; background: #f6e58d; border-radius: 10px 10px 0 0;
-    position: relative;
-  }
-  .frosting::before, .frosting::after {
-    content: ''; position: absolute; bottom: -10px;
-    width: 14px; height: 18px; background: #f6e58d;
-    border-radius: 0 0 50% 50%;
-  }
-  .frosting::before { left: 18px; }
-  .frosting::after { left: 50px; }
+        .cake-whole {
+            position: absolute;
+            width: 160px;
+            height: 120px;
+            left: 50%;
+            bottom: 40px;
+            transform: translateX(-50%);
+            transition: all 0.5s ease;
+        }
 
-  .sponge { height: 72px; background: #ff9ff3; position: relative; }
-  .filling { position: absolute; top: 22px; left: 0; width: 100%; height: 10px; background: #ffeaa7; }
-  .base { height: 18px; background: #f8a5c2; border-radius: 0 0 6px 6px; }
+        .cake-slice {
+            position: absolute;
+            width: 80px; height: 120px;
+            right: 0; top: 0;
+            z-index: 20;
+            transform-origin: left center;
+            transition: transform 0.8s cubic-bezier(0.6, -0.28, 0.74, 0.05);
+            clip-path: polygon(0 0, 100% 30%, 100% 100%, 0 100%);
+        }
 
-  .candles-row {
-    position: absolute; bottom: calc(24px + 108px); left: 50%; transform: translateX(-50%);
-    display: flex; gap: 22px; z-index: 20;
-  }
-  .candle { width: 8px; height: 30px; background: #ff6b6b; border-radius: 4px 4px 0 0; position: relative; }
-  .flame {
-    position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
-    width: 10px; height: 14px; background: #ffbe76;
-    border-radius: 50% 50% 20% 20%;
-    animation: flicker 0.2s infinite alternate;
-    box-shadow: 0 0 8px #ffbe76;
-  }
-  @keyframes flicker {
-    0% { transform: translateX(-50%) scaleY(1); }
-    100% { transform: translateX(-50%) scaleY(0.85); }
-  }
+        .layer-frosting { position: absolute; width: 100%; height: 20px; top: 0; left: 0; background: #f6e58d; border-radius: 10px 10px 0 0; }
+        .layer-body { position: absolute; width: 100%; height: 80px; top: 20px; left: 0; background: #ff9ff3; }
+        .layer-bottom { position: absolute; width: 100%; height: 20px; bottom: 0; left: 0; background: #f8a5c2; border-radius: 0 0 5px 5px; }
+        
+        .cream-filling { position: absolute; top: 20px; left: 0; width: 100%; height: 10px; background: #ffeaa7; z-index: 15; display: none; }
+        .drip { position: absolute; background: white; border-radius: 0 0 50% 50%; }
+        .d1 { width: 15px; height: 25px; top: 0; left: 20px; }
+        .d2 { width: 12px; height: 35px; top: 0; left: 50px; }
+        
+        .slice-content { width: 100%; height: 100%; position: relative; }
+        .slice-frosting { position: absolute; width: 100%; height: 20px; top: 0; right: 0; background: #f6e58d; }
+        .slice-body { position: absolute; width: 100%; height: 80px; top: 20px; right: 0; background: #ff9ff3; }
+        .slice-bottom { position: absolute; width: 100%; height: 20px; bottom: 0; right: 0; background: #f8a5c2; }
+        .slice-inner { position: absolute; top: 40px; left: 0; width: 100%; height: 30px; background: #ffeaa7; opacity: 0; transition: opacity 0.5s; }
 
-  /* Slice - right half */
-  .slice {
-    position: absolute; bottom: 24px; right: 14px;
-    width: 80px; height: 108px;
-    transition: transform 0.7s cubic-bezier(0.6,-0.28,0.74,0.05), opacity 0.5s;
-    z-index: 15;
-    transform-origin: left center;
-  }
-  .slice-frosting { height: 18px; background: #f6e58d; border-radius: 0 10px 0 0; }
-  .slice-sponge { height: 72px; background: #ff9ff3; position: relative; }
-  .slice-jam { position: absolute; top: 22px; left: 0; width: 100%; height: 10px; background: #ffeaa7; }
-  .slice-base { height: 18px; background: #f8a5c2; border-radius: 0 0 6px 0; }
-  .slice-cut-face {
-    position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
-    background: linear-gradient(#f6e58d 0 17%, #ff9ff3 17% 83%, #f8a5c2 83% 100%);
-    display: none;
-  }
+        .plate { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 200px; height: 15px; background: #ddd; border-radius: 50%; box-shadow: 0 5px 10px rgba(0,0,0,0.1); z-index: 5; }
 
-  .sliced .slice { transform: translateX(55px) rotate(12deg); }
-  .sliced .slice-cut-face { display: block; }
-  .sliced .flame { display: none; }
+        .knife { position: absolute; top: 50%; left: -50px; width: 80px; height: 20px; z-index: 100; opacity: 0; transform: rotate(0deg); transition: all 0.1s; pointer-events: none; }
+        .blade { width: 50px; height: 8px; background: linear-gradient(to bottom, #ecf0f1, #bdc3c7); float: left; margin-top: 6px; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+        .handle { width: 25px; height: 20px; background: #6d4c41; border-radius: 5px; float: left; }
 
-  /* Knife */
-  .knife {
-    position: absolute; top: 50%; left: -70px;
-    transform: translateY(-50%) rotate(-10deg);
-    opacity: 0; pointer-events: none; z-index: 30;
-    transition: none;
-  }
-  .knife svg { display: block; }
-  .cutting .knife { animation: swipe 0.45s ease-in forwards; opacity: 1; }
-  @keyframes swipe {
-    0% { left: -70px; opacity: 1; }
-    60% { left: 190px; opacity: 1; }
-    100% { left: 220px; opacity: 0; }
-  }
+        .candles { position: absolute; top: -30px; left: 50%; transform: translateX(-50%); display: flex; gap: 20px; z-index: 25; }
+        .candle { width: 8px; height: 30px; background: #ff6b6b; border-radius: 5px 5px 0 0; position: relative; }
+        .flame { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); width: 10px; height: 15px; background: #ffbe76; border-radius: 50% 50% 20% 20%; animation: flicker 0.2s infinite alternate; box-shadow: 0 0 10px #ffbe76; }
+        @keyframes flicker { 0% { transform: translateX(-50%) scale(1); } 100% { transform: translateX(-50%) scale(0.9); } }
 
-  .hint {
-    margin-top: 16px; font-size: 0.85rem; color: #fff;
-    background: rgba(0,0,0,0.2); padding: 4px 14px; border-radius: 20px;
-    display: inline-block; transition: opacity 0.4s;
-  }
+        /* --- ANIMATION STATES --- */
+        .cutting .knife { opacity: 1; animation: swipeKnife 0.5s ease-in forwards; }
+        @keyframes swipeKnife { 0% { left: -50px; top: 50%; opacity: 1; } 100% { left: 180px; top: 50%; opacity: 1; } }
 
-  .btn {
-    margin-top: 22px; padding: 11px 28px;
-    font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.95rem;
-    color: #fff; background: linear-gradient(45deg, #ff6b6b, #ff9ff3);
-    border: none; border-radius: 50px;
-    box-shadow: 0 4px 14px rgba(255,107,107,0.45);
-    cursor: pointer; display: none; transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(255,107,107,0.6); }
+        .sliced .cake-slice { transform: translateX(60px) rotate(15deg); }
+        .sliced .slice-inner { opacity: 1; }
+        .sliced .cream-filling { display: block; }
+        .sliced .flame { display: none; }
 
-  /* Note */
-  .note {
-    display: none; text-align: left;
-    background: #fff; border-radius: 14px; padding: 24px 22px;
-    max-height: 320px; overflow-y: auto; margin-top: 16px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-    animation: popIn 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
-  }
-  @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-  .note-title { font-family: 'Pacifico', cursive; color: #d63384; font-size: 1.5rem; margin-bottom: 14px; text-align: center; }
-  .note p { font-family: 'Caveat', cursive; font-size: 1.3rem; color: #555; line-height: 1.55; margin-bottom: 10px; }
+        .cake-stage { cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg> 12 12, auto'); }
 
-  /* Gallery */
-  .gallery { display: none; margin-top: 16px; animation: popIn 0.5s cubic-bezier(0.175,0.885,0.32,1.275); }
-  .gallery-title { font-family: 'Pacifico', cursive; color: #fff; font-size: 1.6rem; margin-bottom: 14px; text-shadow: 2px 2px 0 #d63384; }
-  .photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-  .photo-frame {
-    aspect-ratio: 1; background: #fff; padding: 5px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.12);
-    border-radius: 4px; overflow: hidden;
-    transition: transform 0.3s;
-  }
-  .photo-frame:hover { transform: rotate(4deg) scale(1.06); }
-  .photo-frame img { width: 100%; height: 100%; object-fit: cover; border-radius: 3px; display: block; }
-</style>
+        .instruction { margin-top: 20px; font-size: 0.9rem; color: #fff; background: rgba(0,0,0,0.2); padding: 5px 15px; border-radius: 20px; display: inline-block; transition: opacity 0.5s; }
 
-<div class="wrap" id="wrap">
-  <div class="hearts-bg" id="hearts"></div>
-  <canvas class="confetti" id="confetti"></canvas>
+        /* --- BUTTONS --- */
+        .action-btn {
+            margin-top: 30px;
+            padding: 12px 30px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            color: white;
+            background: linear-gradient(45deg, #ff6b6b, #ff9ff3);
+            border: none;
+            border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            outline: none;
+            display: none; /* Hidden by default */
+        }
+        .action-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(255, 107, 107, 0.6); }
+        .action-btn:active { transform: translateY(1px); }
 
-  <div class="center" id="main">
-    <div class="wish">Happy Birthday!</div>
+        /* --- LONG NOTE CONTAINER --- */
+        .note-overlay {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            width: 90%; max-width: 450px;
+            height: 60vh; 
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            padding: 30px;
+            box-sizing: border-box;
+            overflow-y: auto;
+            z-index: 200;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background-image: radial-gradient(#f0f0f0 1px, transparent 1px);
+            background-size: 15px 15px;
+            display: flex;
+            flex-direction: column;
+        }
 
-    <div class="cake-wrap" id="cakeWrap" onclick="cutCake()">
-      <div class="knife" id="knife">
-        <svg width="90" height="28" viewBox="0 0 90 28">
-          <rect x="0" y="10" width="58" height="8" rx="2" fill="#d0d0d0"/>
-          <polygon points="58,10 72,4 72,24 58,18" fill="#bbb"/>
-          <rect x="72" y="4" width="18" height="20" rx="4" fill="#6d4c41"/>
-        </svg>
-      </div>
+        .note-overlay.show { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
+        .note-overlay.hide-down { transform: translate(-50%, 150%) scale(0.8); opacity: 0; }
 
-      <div class="candles-row" id="candles">
-        <div class="candle"><div class="flame"></div></div>
-        <div class="candle"><div class="flame"></div></div>
-      </div>
+        .note-header { font-family: 'Pacifico', cursive; color: #d63384; font-size: 2rem; margin-bottom: 20px; text-align: center; }
+        .note-content { font-family: 'Caveat', cursive; font-size: 1.6rem; color: #555; line-height: 1.6; text-align: left; flex-grow: 1; }
 
-      <div class="cake-body" id="cakeBody">
-        <div class="frosting"></div>
-        <div class="sponge"><div class="filling"></div></div>
-        <div class="base"></div>
-      </div>
+        .note-overlay::-webkit-scrollbar { width: 8px; }
+        .note-overlay::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        .note-overlay::-webkit-scrollbar-thumb { background: #ff9ff3; border-radius: 10px; }
 
-      <div class="slice" id="slice">
-        <div class="slice-cut-face"></div>
-        <div class="slice-frosting"></div>
-        <div class="slice-sponge"><div class="slice-jam"></div></div>
-        <div class="slice-base"></div>
-      </div>
+        /* --- PHOTO GALLERY --- */
+        .gallery-container {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            width: 90%; max-width: 600px;
+            height: 70vh;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 20px;
+            box-sizing: border-box;
+            z-index: 300;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
 
-      <div class="plate"></div>
+        .gallery-container.show { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
+
+        .gallery-title { font-family: 'Pacifico', cursive; color: #d63384; text-align: center; font-size: 2rem; margin-bottom: 20px; }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            padding-bottom: 20px;
+        }
+
+        .photo-frame {
+            aspect-ratio: 1;
+            background: #fff;
+            padding: 5px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transform: rotate(0deg);
+            transition: transform 0.3s;
+            overflow: hidden;
+        }
+
+        .photo-frame:hover { transform: rotate(5deg) scale(1.05); z-index: 10; }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        /* Confetti */
+        #confetti-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
+    </style>
+</head>
+<body>
+
+    <div class="floating-hearts" id="bg-hearts"></div>
+    <canvas id="confetti-canvas"></canvas>
+
+    <div class="container">
+        
+        <!-- TIMER SECTION -->
+        <div id="timer-section" class="glass-card">
+            <h1>Countdown</h1>
+            <div class="sub-text">Until the celebration begins...</div>
+            <div class="countdown">
+                <div class="time-box"><div class="number" id="days">00</div><div class="label">Days</div></div>
+                <div class="time-box"><div class="number" id="hours">00</div><div class="label">Hours</div></div>
+                <div class="time-box"><div class="number" id="minutes">00</div><div class="label">Minutes</div></div>
+                <div class="time-box"><div class="number" id="seconds">00</div><div class="label">Seconds</div></div>
+            </div>
+        </div>
+
+        <!-- CELEBRATION SECTION -->
+        <div id="celebration">
+            <div class="wish-text">Happy Birthday!</div>
+            
+            <!-- Cake Stage -->
+            <div class="cake-stage" id="cake-stage" onclick="triggerCut()">
+                <div class="knife"><div class="blade"></div><div class="handle"></div></div>
+                <div class="cake-whole">
+                    <div class="candles"><div class="candle"><div class="flame"></div></div><div class="candle"><div class="flame"></div></div></div>
+                    <div style="position:absolute; left:0; top:0; width:50%; height:100%; z-index:10;">
+                        <div class="layer-frosting" style="width:200%;"></div>
+                        <div class="layer-body" style="width:200%;"></div>
+                        <div class="layer-bottom" style="width:200%;"></div>
+                        <div class="drip d1"></div>
+                        <div class="cream-filling"></div>
+                    </div>
+                    <div class="cake-slice">
+                        <div class="slice-content">
+                            <div class="slice-frosting"></div>
+                            <div class="slice-body"></div>
+                            <div class="slice-bottom"></div>
+                            <div class="slice-inner"></div>
+                            <div class="drip d2" style="left: auto; right: 10px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="plate"></div>
+            </div>
+
+            <div class="instruction" id="instruction">Click the cake to cut! 🎂</div>
+
+            <!-- BUTTON 1: Surprise (Shows Note) -->
+            <button id="surprise-btn" class="action-btn" onclick="showSurprise()">Click for Surprise 🎁</button>
+
+            <!-- NOTE OVERLAY -->
+            <div class="note-overlay" id="note-overlay">
+                <div class="note-header">A Special Message</div>
+                <div class="note-content">
+                    <p>Pta nhi ki me abhi tere saath call pe hu ya nhi par ha first wish mera hi hai</p>
+                    <p>Tu mere liye bohot special hai hamara first time Eng class me milna jab me tere piche khada tha</p>
+                    <p>phir pehli baar stationary mein baat karna</p>
+                    <p>phir HRD mein khade rhe ke baat karna</p>
+                    <p>mene tujhe chicken khilaya canteen mein phir thoda close hue</p>
+                    <p>Ek baar to maine tera naam bhi galat bola tha yaad hai Jahnvi karke bulaya tha</p>
+                    <p>phir jab mene tujhe first time call kiya tha jab tu carrom khelne gyi thi</p>
+                    <p>Tu mujhe maths sikha ti thi canteen me yaad hai. Phir hamare rumours phelna start hua ek ladki to aake sidha puchi thi canteen mein, that was really crazy</p>
+                    <p>phir mene clg me rukna start kiya hum BBC me baith te the</p>
+                    <p>hamara nandini me jaake first time khana.Library me jaake baithna, padh ne ke naam pe time pass karna phir last me bolna ki aaj bhi kuch nhi padha. Phir exam se pehele raat raat bhar baithke vc pe padhna.</p>
+                    <p>Tere saath bahar ghumne jaana, AGB me khana everything feels so special</p>
+                    <p>Basically I remember everything, and it is really precious for me. </p>
+                    <p>tera baccho jaisa act karna, phir pyaar se mujhe daant na, mujhe samjhana mera favourite hai</p>
+                    <p>itne mahino me sabse best thing happend with me was you. I love spending time with you, ha maana ki jealous hojata hu par itna to hak hai mera, hai na ?</p>
+                    <p>i already know the answer tu hai karke hi bolegi. Main bus itna bolna chata hu ki thankkkyouuuuu for coming in my life and making it better, no actually you brought the best version of me out, and it really means a lot</p>
+                    <p>Jaisi hai hamesha waisi hi rehna aur kabhi kisike liye bhi mat badalna</p>
+                    <p>Ha aur hamesha yaad rakhna no matter what the situation is me hamesha tere saath hu</p>
+                    <p>HAPPY BIRTHDAY MY PILLU</p>
+                </div>
+                <!-- BUTTON 2: Our Memories (Shows Gallery) -->
+                <button class="action-btn" style="display: block; margin: 20px auto 0; flex-shrink: 0;" onclick="showGallery()">Our Memories 📸</button>
+            </div>
+
+            <!-- PHOTO GALLERY (Your Photos) -->
+            <div class="gallery-container" id="gallery-container">
+                <div class="gallery-title">Our Memories</div>
+                <div class="photo-grid">
+                    <!-- Photo 1 -->
+                    <div class="photo-frame">
+                        <img src="https://z-cdn-media.chatglm.cn/files/a5ce0647-d124-4c0f-8ccd-6a5f59522f2f.jpeg?auth_key=1874079669-4791c4d2221842388a4fa793ff583587-0-debc44bcd23d327288636c97d59adc24" alt="Memory 1">
+                    </div>
+                    <!-- Photo 2 -->
+                    <div class="photo-frame">
+                        <img src="https://z-cdn-media.chatglm.cn/files/cf5fdc7b-fd79-482d-abd0-82202def5a14.jpeg?auth_key=1874079669-32e634efceb84210a8d8faba3e30f8a8-0-e6fc672b7a39d6c8552c4c7b9ee0a018" alt="Memory 2">
+                    </div>
+                    <!-- Photo 3 -->
+                    <div class="photo-frame">
+                        <img src="https://z-cdn-media.chatglm.cn/files/7276d0e0-356f-496d-af93-9c08a0c017a8.jpeg?auth_key=1874079669-42847e4404f14b5f9e9c359fb372a51c-0-ada238eef06c918cf14e46d6b0cbb65d" alt="Memory 3">
+                    </div>
+                    <!-- Photo 4 -->
+                    <div class="photo-frame">
+                        <img src="https://z-cdn-media.chatglm.cn/files/75e7e9b3-62b4-4e18-91ef-7cdc61929e98.jpeg?auth_key=1874079669-cd6b880f945b407296e8cd1fb5c45bfa-0-2bfa73ef8d078cc84e25ecf0ff79baec" alt="Memory 4">
+                    </div>
+                    <!-- Photo 5 -->
+                    <div class="photo-frame">
+                        <img src="https://z-cdn-media.chatglm.cn/files/b4e6dae7-d59e-4c39-91ee-5b936227bf9e.jpeg?auth_key=1874079669-749fcf873e9d46e8946014bb523d63e1-0-38a0245381866e7d7a4b7831cd66a9ab" alt="Memory 5">
+                    </div>
+                    <!-- Photo 6 -->
+                    <div class="photo-frame">
+                        <img src="https://z-cdn-media.chatglm.cn/files/dcd7cf4b-30fd-4598-8781-a0020d4e9e7f.jpeg?auth_key=1874079669-0a6e546a07df42c694b524ccaa34dea0-0-9b768d7318ae4b054bd6e9c045d7db01" alt="Memory 6">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
     </div>
 
-    <div class="hint" id="hint">Click the cake to cut! 🎂</div>
-    <button class="btn" id="surpriseBtn" onclick="showNote()">Click for Surprise 🎁</button>
+    <script>
+        // --- CONFIGURATION ---
+        // Timer set to April 13, 2025 at 12:00 AM (Midnight)
+        const birthdayDate = new Date("April 13, 2026 00:00:00");
 
-    <div class="note" id="note">
-      <div class="note-title">A Special Message</div>
-      <p>Pta nhi ki me abhi tere saath call pe hu ya nhi par ha first wish mera hi hai</p>
-      <p>Tu mere liye bohot special hai — hamara first time Eng class me milna jab me tere piche khada tha</p>
-      <p>phir pehli baar stationary mein baat karna, phir HRD mein khade rhe ke baat karna</p>
-      <p>mene tujhe chicken khilaya canteen mein phir thoda close hue 🍗</p>
-      <p>Ek baar to maine tera naam bhi galat bola tha yaad hai — Jahnvi karke bulaya tha 😅</p>
-      <p>phir jab mene tujhe first time call kiya tha jab tu carrom khelne gyi thi</p>
-      <p>Tu mujhe maths sikha ti thi canteen me yaad hai. Phir hamare rumours phelna start hua — ek ladki to aake sidha puchi thi canteen mein, that was really crazy 😂</p>
-      <p>phir mene clg me rukna start kiya hum BBC me baith te the</p>
-      <p>hamara nandini me jaake first time khana. Library me jaake baithna, padh ne ke naam pe time pass karna — phir last me bolna ki aaj bhi kuch nhi padha 😂</p>
-      <p>Phir exam se pehele raat raat bhar baithke vc pe padhna</p>
-      <p>Tere saath bahar ghumne jaana, AGB me khana — everything feels so special 🥹</p>
-      <p>Basically I remember everything, and it is really precious for me.</p>
-      <p>tera baccho jaisa act karna, phir pyaar se mujhe daant na, mujhe samjhana — mera favourite hai 💕</p>
-      <p>itne mahino me sabse best thing happend with me was you. I love spending time with you — ha maana ki jealous hojata hu par itna to hak hai mera, hai na?</p>
-      <p>i already know the answer — tu hai karke hi bolegi 😌</p>
-      <p>Main bus itna bolna chata hu ki thankkkyouuuuu for coming in my life and making it better. No actually — you brought the best version of me out, and it really means a lot 🌸</p>
-      <p>Jaisi hai hamesha waisi hi rehna aur kabhi kisike liye bhi mat badalna</p>
-      <p>Ha aur hamesha yaad rakhna — no matter what the situation is, me hamesha tere saath hu 💪</p>
-      <p><strong>HAPPY BIRTHDAY MY PILLU 🎂❤️</strong></p>
-      <div style="text-align:center; margin-top: 16px;">
-        <button class="btn" style="display:inline-block;" onclick="showGallery()">Our Memories 📸</button>
-      </div>
-    </div>
+        // --- LOGIC ---
+        const daysEl = document.getElementById('days');
+        const hoursEl = document.getElementById('hours');
+        const minsEl = document.getElementById('minutes');
+        const secsEl = document.getElementById('seconds');
+        const timerSection = document.getElementById('timer-section');
+        const celebrationSection = document.getElementById('celebration');
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
 
-    <div class="gallery" id="gallery">
-      <div class="gallery-title">Our Memories 📸</div>
-      <div class="photo-grid">
-        <div class="photo-frame"><img src="https://z-cdn-media.chatglm.cn/files/a5ce0647-d124-4c0f-8ccd-6a5f59522f2f.jpeg" alt="Memory 1" onerror="this.parentElement.style.background='#ffeaa7'"></div>
-        <div class="photo-frame"><img src="https://z-cdn-media.chatglm.cn/files/cf5fdc7b-fd79-482d-abd0-82202def5a14.jpeg" alt="Memory 2" onerror="this.parentElement.style.background='#ff9ff3'"></div>
-        <div class="photo-frame"><img src="https://z-cdn-media.chatglm.cn/files/7276d0e0-356f-496d-af93-9c08a0c017a8.jpeg" alt="Memory 3" onerror="this.parentElement.style.background='#74b9ff'"></div>
-        <div class="photo-frame"><img src="https://z-cdn-media.chatglm.cn/files/75e7e9b3-62b4-4e18-91ef-7cdc61929e98.jpeg" alt="Memory 4" onerror="this.parentElement.style.background='#fd79a8'"></div>
-        <div class="photo-frame"><img src="https://z-cdn-media.chatglm.cn/files/b4e6dae7-d59e-4c39-91ee-5b936227bf9e.jpeg" alt="Memory 5" onerror="this.parentElement.style.background='#55efc4'"></div>
-        <div class="photo-frame"><img src="https://z-cdn-media.chatglm.cn/files/dcd7cf4b-30fd-4598-8781-a0020d4e9e7f.jpeg" alt="Memory 6" onerror="this.parentElement.style.background='#fdcb6e'"></div>
-      </div>
-    </div>
-  </div>
-</div>
+        // Hearts BG
+        function createHearts() {
+            const container = document.getElementById('bg-hearts');
+            for(let i=0; i<15; i++) {
+                const heart = document.createElement('div');
+                heart.innerHTML = '❤';
+                heart.classList.add('heart');
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                heart.style.animationDelay = (Math.random() * 5) + 's';
+                container.appendChild(heart);
+            }
+        }
+        createHearts();
 
-<script>
-let cut = false;
+        // Countdown
+        function updateCountdown() {
+            const now = new Date();
+            const diff = birthdayDate - now;
+            if(diff <= 0) {
+                clearInterval(timerInterval);
+                startCelebration();
+                return;
+            }
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+            daysEl.innerText = d < 10 ? '0'+d : d;
+            hoursEl.innerText = h < 10 ? '0'+h : h;
+            minsEl.innerText = m < 10 ? '0'+m : m;
+            secsEl.innerText = s < 10 ? '0'+s : s;
+        }
+        const timerInterval = setInterval(updateCountdown, 1000);
+        updateCountdown();
 
-function createHearts() {
-  const c = document.getElementById('hearts');
-  for (let i = 0; i < 12; i++) {
-    const h = document.createElement('div');
-    h.className = 'heart';
-    h.textContent = '❤';
-    h.style.left = Math.random() * 100 + '%';
-    h.style.bottom = '0';
-    h.style.animationDuration = (Math.random() * 3 + 4) + 's';
-    h.style.animationDelay = (Math.random() * 5) + 's';
-    c.appendChild(h);
-  }
-}
-createHearts();
+        // Celebration
+        function startCelebration() {
+            timerSection.style.display = 'none';
+            celebrationSection.style.display = 'block';
+            startConfetti();
+        }
 
-function cutCake() {
-  if (cut) return;
-  cut = true;
-  const wrap = document.getElementById('cakeWrap');
-  const hint = document.getElementById('hint');
-  const btn = document.getElementById('surpriseBtn');
-  const knife = document.getElementById('knife');
+        // --- CAKE CUTTING LOGIC ---
+        let isCut = false;
+        function triggerCut() {
+            if(isCut) return;
+            const stage = document.getElementById('cake-stage');
+            const instruction = document.getElementById('instruction');
+            const btn = document.getElementById('surprise-btn');
+            
+            stage.classList.add('cutting');
+            setTimeout(() => {
+                stage.classList.remove('cutting');
+                stage.classList.add('sliced');
+                instruction.innerText = "Yummy! 🍰";
+                burstConfetti();
+            }, 500);
 
-  knife.style.opacity = '1';
-  wrap.classList.add('cutting');
+            setTimeout(() => {
+                instruction.style.opacity = '0';
+                btn.style.display = 'inline-block';
+                btn.style.animation = "zoomIn 0.5s ease forwards";
+            }, 1400);
 
-  setTimeout(() => {
-    wrap.classList.remove('cutting');
-    wrap.classList.add('sliced');
-    hint.textContent = 'Yummy! 🍰';
-    burst(80);
-  }, 450);
+            isCut = true;
+        }
 
-  setTimeout(() => {
-    hint.style.opacity = '0';
-    btn.style.display = 'inline-block';
-  }, 1200);
-}
+        // --- SHOW SURPRISE (NOTE) ---
+        function showSurprise() {
+            const cakeStage = document.getElementById('cake-stage');
+            const btn = document.getElementById('surprise-btn');
+            const note = document.getElementById('note-overlay');
 
-function showNote() {
-  document.getElementById('surpriseBtn').style.display = 'none';
-  document.getElementById('note').style.display = 'block';
-  burst(60);
-}
+            cakeStage.classList.add('slide-out');
+            btn.style.display = 'none';
 
-function showGallery() {
-  document.getElementById('note').style.display = 'none';
-  document.getElementById('gallery').style.display = 'block';
-  burst(60);
-}
+            setTimeout(() => {
+                note.classList.add('show');
+                burstConfetti();
+            }, 600);
+        }
 
-const canvas = document.getElementById('confetti');
-const ctx = canvas.getContext('2d');
-let pieces = [];
-const cols = ['#ff6b6b','#feca57','#48dbfb','#ff9ff3','#54a0ff','#fff'];
+        // --- SHOW GALLERY (PHOTOS) ---
+        function showGallery() {
+            const note = document.getElementById('note-overlay');
+            const gallery = document.getElementById('gallery-container');
 
-function resize() {
-  const wrap = document.getElementById('wrap');
-  canvas.width = wrap.offsetWidth;
-  canvas.height = wrap.offsetHeight;
-}
-resize();
-window.addEventListener('resize', resize);
+            // Hide Note
+            note.classList.remove('show');
+            note.classList.add('hide-down');
 
-function burst(n) {
-  for (let i = 0; i < n; i++) {
-    pieces.push({
-      x: canvas.width * 0.5 + (Math.random() - 0.5) * 60,
-      y: canvas.height * 0.45,
-      vx: (Math.random() - 0.5) * 7,
-      vy: -(Math.random() * 6 + 2),
-      size: Math.random() * 9 + 4,
-      color: cols[Math.floor(Math.random() * cols.length)],
-      spin: (Math.random() - 0.5) * 0.3,
-      angle: Math.random() * Math.PI * 2,
-      gravity: 0.18
-    });
-  }
-  requestAnimationFrame(loop);
-}
+            // Show Gallery
+            setTimeout(() => {
+                gallery.classList.add('show');
+                burstConfetti();
+            }, 500);
+        }
 
-function loop() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  pieces = pieces.filter(p => p.y < canvas.height + 20);
-  pieces.forEach(p => {
-    p.vy += p.gravity;
-    p.x += p.vx;
-    p.y += p.vy;
-    p.angle += p.spin;
-    ctx.save();
-    ctx.translate(p.x, p.y);
-    ctx.rotate(p.angle);
-    ctx.fillStyle = p.color;
-    ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
-    ctx.restore();
-  });
-  if (pieces.length > 0) requestAnimationFrame(loop);
-}
-</script>
+        // --- CONFETTI ENGINE ---
+        let pieces = [];
+        const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#54a0ff'];
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function randomPiece() {
+            return {
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height - canvas.height,
+                size: Math.random() * 10 + 5,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                speed: Math.random() * 3 + 2,
+                spin: Math.random() * 10 - 5
+            };
+        }
+        function startConfetti() {
+            for(let i=0; i<50; i++) pieces.push(randomPiece());
+            requestAnimationFrame(animateConfetti);
+        }
+        function burstConfetti() {
+            for(let i=0; i<100; i++) {
+                let p = randomPiece();
+                p.y = canvas.height / 2; 
+                pieces.push(p);
+            }
+        }
+        function animateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            pieces.forEach((p, index) => {
+                p.y += p.speed;
+                p.x += p.spin;
+                ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.spin);
+                ctx.fillStyle = p.color;
+                ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size/2);
+                ctx.restore();
+                if(p.y > canvas.height) pieces.splice(index, 1);
+            });
+            requestAnimationFrame(animateConfetti);
+        }
+    </script>
+</body>
+</html>
