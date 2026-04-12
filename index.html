@@ -263,6 +263,7 @@
 
     <div class="container">
         
+        <!-- TIMER SECTION -->
         <div id="timer-section" class="glass-card">
             <h1>Countdown</h1>
             <div class="sub-text">Until the celebration begins...</div>
@@ -274,9 +275,11 @@
             </div>
         </div>
 
+        <!-- CELEBRATION SECTION -->
         <div id="celebration">
             <div class="wish-text">Happy Birthday!</div>
             
+            <!-- Cake Stage -->
             <div class="cake-stage" id="cake-stage" onclick="triggerCut()">
                 <div class="knife"><div class="blade"></div><div class="handle"></div></div>
                 <div class="cake-whole">
@@ -303,8 +306,10 @@
 
             <div class="instruction" id="instruction">Click the cake to cut! 🎂</div>
 
+            <!-- BUTTON 1: Surprise (Shows Note) -->
             <button id="surprise-btn" class="action-btn" onclick="showSurprise()">Click for Surprise 🎁</button>
 
+            <!-- NOTE OVERLAY -->
             <div class="note-overlay" id="note-overlay">
                 <div class="note-header">A Special Message</div>
                 <div class="note-content">
@@ -327,12 +332,15 @@
                     <p>Ha aur hamesha yaad rakhna no matter what the situation is me hamesha tere saath hu</p>
                     <p>HAPPY BIRTHDAY MY PILLU</p>
                 </div>
+                <!-- BUTTON 2: Our Memories (Shows Gallery) -->
                 <button class="action-btn" style="display: block; margin: 20px auto 0; flex-shrink: 0;" onclick="showGallery()">Our Memories 📸</button>
             </div>
 
+            <!-- PHOTO GALLERY (Your Photos) -->
             <div class="gallery-container" id="gallery-container">
                 <div class="gallery-title">Our Memories</div>
                 <div class="photo-grid">
+                    <!-- Photo 1 -->
                     <!-- Photo 1: Outdoor scene -->
                     <div class="photo-frame">
                         <img src="https://z-cdn-media.chatglm.cn/files/a41dac0b-2964-43f8-b1ff-19d13616697d.jpeg?auth_key=1876020229-ba21417eacaa4a74bf79f8a04875d5a9-0-35b74dce000debc502b5e542f4ef2595" alt="Memory 1">
@@ -366,7 +374,6 @@
 
     <script>
         // --- CONFIGURATION ---
-        // Timer set to April 13, 2026 at 12:00 AM (Midnight)
         // Timer set to April 13, 2025 at 12:00 AM (Midnight)
         const birthdayDate = new Date("April 13, 2026 00:00:00");
 
@@ -395,6 +402,134 @@
         }
         createHearts();
 
+        // Countdown
+        function updateCountdown() {
+            const now = new Date();
+            const diff = birthdayDate - now;
+            if(diff <= 0) {
+                clearInterval(timerInterval);
+                startCelebration();
+                return;
+            }
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+            daysEl.innerText = d < 10 ? '0'+d : d;
+            hoursEl.innerText = h < 10 ? '0'+h : h;
+            minsEl.innerText = m < 10 ? '0'+m : m;
+            secsEl.innerText = s < 10 ? '0'+s : s;
+        }
+        const timerInterval = setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Celebration
+        function startCelebration() {
+            timerSection.style.display = 'none';
+            celebrationSection.style.display = 'block';
+            startConfetti();
+        }
+
+        // --- CAKE CUTTING LOGIC ---
+        let isCut = false;
+        function triggerCut() {
+            if(isCut) return;
+            const stage = document.getElementById('cake-stage');
+            const instruction = document.getElementById('instruction');
+            const btn = document.getElementById('surprise-btn');
+            
+            stage.classList.add('cutting');
+            setTimeout(() => {
+                stage.classList.remove('cutting');
+                stage.classList.add('sliced');
+                instruction.innerText = "Yummy! 🍰";
+                burstConfetti();
+            }, 500);
+
+            setTimeout(() => {
+                instruction.style.opacity = '0';
+                btn.style.display = 'inline-block';
+                btn.style.animation = "zoomIn 0.5s ease forwards";
+            }, 1400);
+
+            isCut = true;
+        }
+
+        // --- SHOW SURPRISE (NOTE) ---
+        function showSurprise() {
+            const cakeStage = document.getElementById('cake-stage');
+            const btn = document.getElementById('surprise-btn');
+            const note = document.getElementById('note-overlay');
+
+            cakeStage.classList.add('slide-out');
+            btn.style.display = 'none';
+
+            setTimeout(() => {
+                note.classList.add('show');
+                burstConfetti();
+            }, 600);
+        }
+
+        // --- SHOW GALLERY (PHOTOS) ---
+        function showGallery() {
+            const note = document.getElementById('note-overlay');
+            const gallery = document.getElementById('gallery-container');
+
+            // Hide Note
+            note.classList.remove('show');
+            note.classList.add('hide-down');
+
+            // Show Gallery
+            setTimeout(() => {
+                gallery.classList.add('show');
+                burstConfetti();
+            }, 500);
+        }
+
+        // --- CONFETTI ENGINE ---
+        let pieces = [];
+        const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#54a0ff'];
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function randomPiece() {
+            return {
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height - canvas.height,
+                size: Math.random() * 10 + 5,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                speed: Math.random() * 3 + 2,
+                spin: Math.random() * 10 - 5
+            };
+        }
+        function startConfetti() {
+            for(let i=0; i<50; i++) pieces.push(randomPiece());
+            requestAnimationFrame(animateConfetti);
+        }
+        function burstConfetti() {
+            for(let i=0; i<100; i++) {
+                let p = randomPiece();
+                p.y = canvas.height / 2; 
+                pieces.push(p);
+            }
+        }
+        function animateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            pieces.forEach((p, index) => {
+                p.y += p.speed;
+                p.x += p.spin;
+                ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.spin);
+                ctx.fillStyle = p.color;
+                ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size/2);
+                ctx.restore();
+                if(p.y > canvas.height) pieces.splice(index, 1);
+            });
+            requestAnimationFrame(animateConfetti);
+        }
+    </script>
+</body>
+</html>
         // Countdown
         function updateCountdown() {
             const now = new Date();
