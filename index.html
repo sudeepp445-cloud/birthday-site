@@ -88,6 +88,7 @@
             height: 300px;
             margin: 0 auto;
             transition: transform 0.8s cubic-bezier(0.6, -0.28, 0.74, 0.05), opacity 0.5s ease;
+            cursor: pointer; /* Makes it clickable */
         }
         .slide-out { transform: translateY(-150%); opacity: 0; pointer-events: none; }
 
@@ -145,8 +146,6 @@
         .sliced .slice-inner { opacity: 1; }
         .sliced .cream-filling { display: block; }
         .sliced .flame { display: none; }
-
-        .cake-stage { cursor: pointer; }
 
         .instruction { margin-top: 20px; font-size: 0.9rem; color: #fff; background: rgba(0,0,0,0.2); padding: 5px 15px; border-radius: 20px; display: inline-block; transition: opacity 0.5s; }
 
